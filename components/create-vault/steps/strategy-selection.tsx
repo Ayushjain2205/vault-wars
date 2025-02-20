@@ -1,8 +1,6 @@
 "use client";
 
 import type React from "react";
-
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Users,
@@ -145,8 +143,9 @@ function StrategyCard({ strategy, isSelected, onSelect }: StrategyCardProps) {
       onClick={onSelect}
       className={cn(
         "relative rounded-lg cursor-pointer overflow-hidden bg-[#0D0E19]",
-        "border-2",
-        isSelected && "shadow-[0_0_15px_rgba(var(--color),0.3)]"
+        "border",
+        isSelected ? "border-2 border-[#04D9FF]" : "border-[#04D9FF]/10",
+        isSelected && "shadow-[0_0_20px_rgba(var(--color),0.5)]"
       )}
       style={
         {
@@ -291,7 +290,7 @@ function StrategyCard({ strategy, isSelected, onSelect }: StrategyCardProps) {
           <motion.div
             className="absolute inset-0 pointer-events-none"
             initial={{ opacity: 0 }}
-            animate={{ opacity: [0.1, 0.15, 0.1] }}
+            animate={{ opacity: [0.15, 0.25, 0.15] }}
             exit={{ opacity: 0 }}
             transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
             style={{
@@ -305,14 +304,17 @@ function StrategyCard({ strategy, isSelected, onSelect }: StrategyCardProps) {
 }
 
 interface StrategySelectionProps {
-  onStrategySelect: (strategy: string | null) => void;
   selectedStrategy: string | null;
+  onStrategySelect: (strategy: string) => void;
 }
 
 export function StrategySelection({
-  onStrategySelect,
   selectedStrategy,
+  onStrategySelect,
 }: StrategySelectionProps) {
+  // Remove this line:
+  // const [selectedStrategy, setSelectedStrategy] = useState<string | null>(null)
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {strategies.map((strategy) => (

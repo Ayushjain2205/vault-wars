@@ -48,11 +48,23 @@ export function RiskProfileCard({
       onClick={onSelect}
       className={cn(
         "relative rounded-lg cursor-pointer overflow-hidden bg-[#0D0E19]",
-        "border-2",
-        type === "safe" && "text-[#04D9FF] border-[#04D9FF]",
-        type === "balanced" && "text-[#9D4EDD] border-[#9D4EDD]",
-        type === "degen" && "text-[#FF10F0] border-[#FF10F0]",
-        isSelected && "shadow-[0_0_15px_rgba(var(--color),0.3)]",
+        "border",
+        type === "safe" && "text-[#04D9FF]",
+        type === "balanced" && "text-[#9D4EDD]",
+        type === "degen" && "text-[#FF10F0]",
+        isSelected
+          ? [
+              "border-2",
+              type === "safe" && "border-[#04D9FF]",
+              type === "balanced" && "border-[#9D4EDD]",
+              type === "degen" && "border-[#FF10F0]",
+              "shadow-[0_0_20px_rgba(var(--color),0.5)]",
+            ]
+          : [
+              type === "safe" && "border-[#04D9FF]/10",
+              type === "balanced" && "border-[#9D4EDD]/10",
+              type === "degen" && "border-[#FF10F0]/10",
+            ],
         type === "safe" && "[--color:4,217,255]",
         type === "balanced" && "[--color:157,78,221]",
         type === "degen" && "[--color:255,16,240]"
@@ -161,7 +173,7 @@ export function RiskProfileCard({
           <motion.div
             className="absolute inset-0 pointer-events-none"
             initial={{ opacity: 0 }}
-            animate={{ opacity: [0.1, 0.15, 0.1] }}
+            animate={{ opacity: [0.15, 0.25, 0.15] }}
             exit={{ opacity: 0 }}
             transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
             style={{

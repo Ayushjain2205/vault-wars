@@ -4,32 +4,34 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { generateColorScheme } from "@/utils/color-hash";
 
-interface LockerProps {
-  size?: "sm" | "md" | "lg";
+interface VaultProps {
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
   onStateChange?: (isOpen: boolean) => void;
   seed: string;
 }
 
-export function Locker({
+export function Vault({
   size = "md",
   className = "",
   onStateChange,
   seed,
-}: LockerProps) {
+}: VaultProps) {
   const [isSpinning, setIsSpinning] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const sizeClasses = {
+    xs: "w-12 h-12", // Changed from w-8 h-8 to w-12 h-12
     sm: "w-32 h-32",
     md: "w-48 h-48",
     lg: "w-64 h-64",
+    xl: "w-96 h-96",
   };
 
   const colors = generateColorScheme(seed);
 
   const handleClick = () => {
-    if (isSpinning) return;
+    if (isSpinning || size === "xs") return;
     setIsSpinning(true);
 
     setTimeout(() => {
@@ -41,12 +43,12 @@ export function Locker({
 
   return (
     <div className={`relative aspect-square ${sizeClasses[size]} ${className}`}>
-      {/* Main locker frame */}
+      {/* Main Vault frame */}
       <div
         className="absolute inset-0 rounded-2xl shadow-lg overflow-hidden"
         style={{ backgroundColor: colors.frame }}
       >
-        {/* Locker interior */}
+        {/* Vault interior */}
         <div
           className="absolute inset-[10%] rounded-xl shadow-inner"
           style={{ backgroundColor: colors.interior }}
@@ -71,12 +73,14 @@ export function Locker({
           </div>
         </div>
 
-        {/* Locker door */}
+        {/* Vault door */}
         <motion.div
-          className="absolute inset-[10%] rounded-xl shadow-lg cursor-pointer"
+          className={`absolute inset-[10%] rounded-xl shadow-lg ${
+            size !== "xs" ? "cursor-pointer" : ""
+          }`}
           style={{ backgroundColor: colors.door }}
           animate={{
-            y: isOpen ? "-95%" : "0%",
+            y: isOpen && size !== "xs" ? "-95%" : "0%",
           }}
           transition={{
             type: "spring",

@@ -112,7 +112,11 @@ export function CreateVaultForm() {
               ? "Choose a name for your vault and see its unique appearance."
               : currentStep === 1
               ? "Select a risk profile that matches your investment goals."
-              : "Coming soon..."}
+              : currentStep === 2
+              ? "Choose an AI-powered trading strategy for your vault."
+              : currentStep === 3
+              ? "Fine-tune your strategy parameters and limits."
+              : "Set up initial funding and activate your vault."}
           </p>
         </div>
 

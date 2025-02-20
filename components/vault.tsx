@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { generateColorScheme } from "@/utils/color-hash";
 
 interface VaultProps {
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  size?: "xs" | "logo" | "sm" | "md" | "lg" | "xl";
   className?: string;
   onStateChange?: (isOpen: boolean) => void;
   seed: string;
@@ -21,17 +21,20 @@ export function Vault({
   const [isOpen, setIsOpen] = useState(false);
 
   const sizeClasses = {
-    xs: "w-12 h-12", // Changed from w-8 h-8 to w-12 h-12
+    xs: "w-12 h-12",
+    logo: "w-16 h-16",
     sm: "w-32 h-32",
     md: "w-48 h-48",
     lg: "w-64 h-64",
     xl: "w-96 h-96",
   };
 
+  const isStatic = size === "xs" || size === "logo";
+
   const colors = generateColorScheme(seed);
 
   const handleClick = () => {
-    if (isSpinning || size === "xs") return;
+    if (isSpinning || isStatic) return;
     setIsSpinning(true);
 
     setTimeout(() => {
@@ -76,11 +79,11 @@ export function Vault({
         {/* Vault door */}
         <motion.div
           className={`absolute inset-[10%] rounded-xl shadow-lg ${
-            size !== "xs" ? "cursor-pointer" : ""
+            !isStatic ? "cursor-pointer" : ""
           }`}
           style={{ backgroundColor: colors.door }}
           animate={{
-            y: isOpen && size !== "xs" ? "-95%" : "0%",
+            y: isOpen && !isStatic ? "-95%" : "0%",
           }}
           transition={{
             type: "spring",

@@ -18,6 +18,7 @@ export function CreateVaultForm() {
   const [currentStep, setCurrentStep] = useState(0);
   const [vaultName, setVaultName] = useState("");
   const [riskProfile, setRiskProfile] = useState<RiskProfileType>(null);
+  const [selectedStrategy, setSelectedStrategy] = useState<string | null>(null);
 
   const handleNext = () => {
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
@@ -41,9 +42,14 @@ export function CreateVaultForm() {
           />
         );
       case 2:
-        return <StrategySelection />;
+        return (
+          <StrategySelection
+            onStrategySelect={setSelectedStrategy}
+            selectedStrategy={selectedStrategy}
+          />
+        );
       case 3:
-        return <StrategyConfig />;
+        return <StrategyConfig selectedStrategy={selectedStrategy || ""} />;
       case 4:
         return <VaultFunding />;
       default:
@@ -57,6 +63,8 @@ export function CreateVaultForm() {
         return !!vaultName;
       case 1:
         return !!riskProfile;
+      case 2:
+        return !!selectedStrategy;
       default:
         return true;
     }

@@ -304,9 +304,15 @@ function StrategyCard({ strategy, isSelected, onSelect }: StrategyCardProps) {
   );
 }
 
-export function StrategySelection() {
-  const [selectedStrategy, setSelectedStrategy] = useState<string | null>(null);
+interface StrategySelectionProps {
+  onStrategySelect: (strategy: string | null) => void;
+  selectedStrategy: string | null;
+}
 
+export function StrategySelection({
+  onStrategySelect,
+  selectedStrategy,
+}: StrategySelectionProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {strategies.map((strategy) => (
@@ -314,7 +320,7 @@ export function StrategySelection() {
           key={strategy.id}
           strategy={strategy}
           isSelected={selectedStrategy === strategy.id}
-          onSelect={() => setSelectedStrategy(strategy.id)}
+          onSelect={() => onStrategySelect(strategy.id)}
         />
       ))}
     </div>

@@ -1,15 +1,16 @@
-import { Vault } from "@/components/vault";
+import Navbar from "@/components/navbar";
 
 export default function Page() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <div className="grid gap-1 md:grid-cols-5">
-        <Vault size="xs" seed="john.doe@example.com" />
-        <Vault size="logo" seed="alice.smith@example.com" />
-        <Vault size="sm" seed="alice.smith@example.com" />
-        <Vault size="md" seed="bob.wilson@example.com" />
-        <Vault size="lg" seed="emma.brown@example.com" />
-      </div>
+    <div className="min-h-screen">
+      <Navbar />
+      <main className="container mx-auto px-4 py-8">
+        <h1 className="font-logo text-4xl mb-4">Welcome to Vault Wars</h1>
+        <p className="text-lg text-gray-600 max-w-2xl">
+          Compete in the ultimate vault-cracking competition. Test your skills,
+          outsmart your opponents, and claim your victory.
+        </p>
+      </main>
     </div>
   );
 }

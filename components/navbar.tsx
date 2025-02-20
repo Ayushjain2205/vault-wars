@@ -12,36 +12,42 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-7xl items-center px-4">
-        <Link href="/" className="flex items-center gap-2 mr-4">
-          <div className="w-16 h-16 -my-4 flex items-center justify-center">
-            <Vault size="xs" seed={seed} />
-          </div>
-          <span className="hidden font-logo text-2xl sm:inline-block">
-            Vault Wars
-          </span>
-        </Link>
-        <nav className="flex flex-1 items-center justify-end space-x-6">
-          <Link
-            href="#"
-            className="font-nav text-sm uppercase font-semibold tracking-wider hover:text-primary transition-colors"
-          >
-            Play Now
+    <header className="sticky top-0 z-50 w-full border-b border-[#04D9FF]/30 bg-[#0D0E19]/80 backdrop-blur">
+      <div className="container mx-auto">
+        <div className="flex h-16 items-center justify-between px-4">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-16 h-16 -my-4 flex items-center justify-center">
+              <Vault size="xs" seed={seed} />
+            </div>
+            <span className="font-logo text-2xl text-[#04D9FF] cyber-text">
+              Vault Wars
+            </span>
           </Link>
-          <Link
-            href="#"
-            className="font-nav text-sm uppercase font-semibold tracking-wider hover:text-primary transition-colors"
-          >
-            Leaderboard
-          </Link>
-          <Link
-            href="#"
-            className="font-nav text-sm uppercase font-semibold tracking-wider hover:text-primary transition-colors"
-          >
-            About
-          </Link>
-        </nav>
+
+          <nav className="flex items-center gap-6">
+            <Link
+              href="#"
+              className="group relative font-nav text-sm font-semibold tracking-wider text-[#04D9FF]"
+            >
+              <span className="relative z-10 uppercase">Play Now</span>
+              <div className="absolute inset-0 -z-0 h-full w-0 bg-[#04D9FF]/10 transition-all group-hover:w-full" />
+            </Link>
+            <Link
+              href="#"
+              className="group relative font-nav text-sm font-semibold tracking-wider text-[#04D9FF]"
+            >
+              <span className="relative z-10 uppercase">Leaderboard</span>
+              <div className="absolute inset-0 -z-0 h-full w-0 bg-[#04D9FF]/10 transition-all group-hover:w-full" />
+            </Link>
+            <Link
+              href="#"
+              className="group relative font-nav text-sm font-semibold tracking-wider text-[#04D9FF]"
+            >
+              <span className="relative z-10 uppercase">About</span>
+              <div className="absolute inset-0 -z-0 h-full w-0 bg-[#04D9FF]/10 transition-all group-hover:w-full" />
+            </Link>
+          </nav>
+        </div>
       </div>
     </header>
   );

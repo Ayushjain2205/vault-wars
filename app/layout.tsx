@@ -1,11 +1,11 @@
 import type React from "react";
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 
-// Load Inter font
-const inter = Inter({
+// Load Space Grotesk font
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-space-grotesk",
 });
 
 export default function RootLayout({
@@ -23,11 +23,13 @@ export default function RootLayout({
         />
         {/* Navigation font */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@500;600&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className={`min-h-screen bg-white ${inter.variable} font-sans`}>
+      <body
+        className={`min-h-screen bg-white ${spaceGrotesk.variable} font-sans`}
+      >
         {children}
       </body>
     </html>

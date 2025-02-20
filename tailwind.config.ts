@@ -48,9 +48,9 @@ const baseConfig = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        sans: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
         logo: ['"Black Ops One"', "cursive"],
-        nav: ["Orbitron", "sans-serif"],
+        nav: ['"Saira Semi Condensed"', "sans-serif"],
       },
     },
   },

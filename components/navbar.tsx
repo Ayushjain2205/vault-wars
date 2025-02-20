@@ -16,19 +16,19 @@ export default function Navbar() {
         <nav className="flex flex-1 items-center justify-end space-x-6">
           <Link
             href="#"
-            className="font-nav text-sm font-medium tracking-wide hover:text-primary transition-colors"
+            className="font-nav text-sm uppercase font-semibold tracking-wider hover:text-primary transition-colors"
           >
             Play Now
           </Link>
           <Link
             href="#"
-            className="font-nav text-sm font-medium tracking-wide hover:text-primary transition-colors"
+            className="font-nav text-sm uppercase font-semibold tracking-wider hover:text-primary transition-colors"
           >
             Leaderboard
           </Link>
           <Link
             href="#"
-            className="font-nav text-sm font-medium tracking-wide hover:text-primary transition-colors"
+            className="font-nav text-sm uppercase font-semibold tracking-wider hover:text-primary transition-colors"
           >
             About
           </Link>

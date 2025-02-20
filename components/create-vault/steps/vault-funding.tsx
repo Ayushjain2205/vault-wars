@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Vault } from "@/components/vault";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,25 +14,52 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { getSonicPrice } from "@/lib/api";
 
 const formSchema = z.object({
-  amount: z.number().min(0.01, "Amount must be greater than 0"),
+  amount: z.number().min(1, "Amount must be greater than 0"),
 });
 
 export function VaultFunding() {
   const [isOpen, setIsOpen] = useState(false);
+  const [sonicPrice, setSonicPrice] = useState<number>(0.85);
+  const [usdValue, setUsdValue] = useState<number>(0);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: 0.01,
+      amount: 1000,
     },
   });
+
+  useEffect(() => {
+    // Fetch initial Sonic price
+    const fetchPrice = async () => {
+      const price = await getSonicPrice();
+      setSonicPrice(price);
+      // Calculate initial USD value
+      setUsdValue(form.getValues("amount") * price);
+    };
+    fetchPrice();
+
+    // Set up interval to refresh price every minute
+    const interval = setInterval(fetchPrice, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Update USD value when Sonic amount changes
+  const handleAmountChange = (value: number) => {
+    form.setValue("amount", value);
+    setUsdValue(value * sonicPrice);
+  };
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     setIsOpen(true);
     // Handle funding logic here
-    console.log(data);
+    console.log({
+      sonicAmount: data.amount,
+      usdValue: data.amount * sonicPrice,
+    });
   };
 
   return (
@@ -50,7 +77,7 @@ export function VaultFunding() {
           </h3>
           <p className="text-gray-400 text-sm">
             Set the initial amount to deposit into your vault. The minimum
-            amount is 0.01 ETH.
+            amount is $5.
           </p>
         </div>
 
@@ -62,22 +89,31 @@ export function VaultFunding() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-[#04D9FF] font-nav uppercase text-sm">
-                    Amount (ETH)
+                    Amount ($S)
                   </FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
                         type="number"
-                        step="0.01"
+                        step="1"
                         className="bg-[#0D0E19] border-[#04D9FF]/30 text-white pr-16"
                         {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        onChange={(e) =>
+                          handleAmountChange(Number(e.target.value))
+                        }
                       />
                       <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                        ETH
+                        $S
                       </span>
                     </div>
                   </FormControl>
+                  <div className="mt-2 text-sm text-gray-400">
+                    ≈ $
+                    {usdValue.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })}{" "}
+                    USD
+                  </div>
                 </FormItem>
               )}
             />

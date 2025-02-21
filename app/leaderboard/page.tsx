@@ -3,36 +3,65 @@
 import { useState } from "react";
 import Navbar from "@/components/navbar";
 import { LeaderboardTable } from "@/components/leaderboard/leaderboard-table";
-import { LeaderboardFilters } from "@/components/leaderboard/leaderboard-filters";
+import { FilterPanel } from "@/components/leaderboard/filter-panel";
 import { LeaderboardPagination } from "@/components/leaderboard/leaderboard-pagination";
 import { mockVaults } from "@/lib/mock-vaults";
-import type { LeaderboardFilters as Filters } from "@/types/leaderboard";
+import type { LeaderboardFilters } from "@/types/leaderboard";
+
+const defaultFilters: LeaderboardFilters = {
+  timeRange: "all",
+  dateRange: {
+    from: undefined,
+    to: undefined,
+  },
+  search: "",
+  page: 1,
+  pageSize: 10,
+  sort: {
+    field: "roi",
+    direction: "desc",
+  },
+  badges: [],
+  riskLevels: [],
+  strategies: [],
+};
 
 export default function LeaderboardPage() {
-  const [filters, setFilters] = useState<Filters>({
-    timeRange: "7d",
-    search: "",
-    page: 1,
-    pageSize: 10,
-  });
+  const [filters, setFilters] = useState<LeaderboardFilters>(defaultFilters);
 
   const filteredVaults = mockVaults
     .filter((vault) => {
       const matchesSearch =
         filters.search === "" ||
         vault.name.toLowerCase().includes(filters.search.toLowerCase());
-      return matchesSearch;
+      const matchesBadges =
+        filters.badges.length === 0 ||
+        filters.badges.some((badge) => vault.badges.includes(badge));
+      const matchesRisk =
+        filters.riskLevels.length === 0 ||
+        filters.riskLevels.includes(vault.riskLevel);
+      const matchesStrategy =
+        filters.strategies.length === 0 ||
+        filters.strategies.includes(vault.strategy);
+
+      return matchesSearch && matchesBadges && matchesRisk && matchesStrategy;
     })
     .sort((a, b) => {
-      // Sort by ROI for the selected time range
-      const roiA = a.roi[filters.timeRange === "7d" ? "7d" : "30d"];
-      const roiB = b.roi[filters.timeRange === "7d" ? "7d" : "30d"];
-      return roiB - roiA;
+      const direction = filters.sort.direction === "asc" ? 1 : -1;
+      switch (filters.sort.field) {
+        case "tvl":
+          return (a.tvl - b.tvl) * direction;
+        case "roi":
+          return (a.roi["30d"] - b.roi["30d"]) * direction;
+        case "yield":
+          return (a.totalYield - b.totalYield) * direction;
+        default:
+          return 0;
+      }
     });
 
   const totalVaults = filteredVaults.length;
   const totalPages = Math.ceil(totalVaults / filters.pageSize);
-
   const paginatedVaults = filteredVaults.slice(
     (filters.page - 1) * filters.pageSize,
     filters.page * filters.pageSize
@@ -57,7 +86,11 @@ export default function LeaderboardPage() {
         </div>
 
         <div className="space-y-6">
-          <LeaderboardFilters filters={filters} onFiltersChange={setFilters} />
+          <FilterPanel
+            filters={filters}
+            onFiltersChange={setFilters}
+            onReset={() => setFilters(defaultFilters)}
+          />
           <div className="space-y-4">
             <div className="text-sm text-gray-400">
               Showing {(filters.page - 1) * filters.pageSize + 1}-

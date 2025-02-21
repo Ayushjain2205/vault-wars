@@ -1,4 +1,9 @@
-import type { VaultStats, BadgeType } from "@/types/leaderboard";
+import type {
+  VaultStats,
+  RiskLevel,
+  Strategy,
+  BadgeType,
+} from "@/types/leaderboard";
 
 // Helper to generate mock performance data
 function generatePerformance(
@@ -23,12 +28,30 @@ function generatePerformance(
   return data;
 }
 
+const strategies: Strategy[] = [
+  "copy",
+  "yield",
+  "snipe",
+  "arbitrage",
+  "airdrop",
+  "nft",
+  "limit",
+  "grid",
+];
+
 // Helper to generate a vault with random data
 function generateVault(id: string, name: string): VaultStats {
   const baseYield = Math.random() * 60 - 20; // -20 to +40
   const weekYield = baseYield * (Math.random() * 0.3 + 0.85); // 85-115% of base yield
   const monthYield = baseYield * (Math.random() * 0.5 + 0.75); // 75-125% of base yield
   const tvl = Math.floor(Math.random() * 900000) + 100000; // 100k to 1M
+
+  let riskLevel: RiskLevel = "balanced";
+  if (Math.abs(weekYield - monthYield) > 15 || baseYield > 30) {
+    riskLevel = "degen";
+  } else if (Math.abs(weekYield - monthYield) < 5 && tvl > 400000) {
+    riskLevel = "safe";
+  }
 
   const badges: BadgeType[] = [];
   if (baseYield > 30) badges.push("top-gainer");
@@ -44,8 +67,13 @@ function generateVault(id: string, name: string): VaultStats {
       "7d": weekYield,
       "30d": monthYield,
     },
-    performance: generatePerformance(100, 0.02),
+    performance: generatePerformance(
+      100,
+      riskLevel === "degen" ? 0.03 : riskLevel === "balanced" ? 0.02 : 0.01
+    ),
     badges,
+    riskLevel,
+    strategy: strategies[Math.floor(Math.random() * strategies.length)],
   };
 }
 

@@ -22,4 +22,6 @@ export interface VaultStats {
 export interface LeaderboardFilters {
   timeRange: TimeRange;
   search: string;
+  page: number;
+  pageSize: number;
 }

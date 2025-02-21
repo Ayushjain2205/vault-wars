@@ -10,9 +10,14 @@ import { cn } from "@/lib/utils";
 interface LeaderboardTableProps {
   vaults: VaultStats[];
   timeRange: TimeRange;
+  currentPage: number;
 }
 
-export function LeaderboardTable({ vaults, timeRange }: LeaderboardTableProps) {
+export function LeaderboardTable({
+  vaults,
+  timeRange,
+  currentPage,
+}: LeaderboardTableProps) {
   const [hoveredVault, setHoveredVault] = useState<string | null>(null);
 
   const formatPercentage = (value: number) => {
@@ -48,13 +53,13 @@ export function LeaderboardTable({ vaults, timeRange }: LeaderboardTableProps) {
             >
               <td className="w-24 p-4">
                 <span className="text-2xl font-logo text-[#04D9FF]">
-                  {index === 0
+                  {index === 0 && currentPage === 1
                     ? "🥇"
-                    : index === 1
+                    : index === 1 && currentPage === 1
                     ? "🥈"
-                    : index === 2
+                    : index === 2 && currentPage === 1
                     ? "🥉"
-                    : index + 1}
+                    : (currentPage - 1) * 10 + index + 1}
                 </span>
               </td>
               <td className="w-[300px] p-4">

@@ -1,4 +1,4 @@
-import type { VaultStats } from "@/types/leaderboard";
+import type { VaultStats, BadgeType } from "@/types/leaderboard";
 
 // Helper to generate mock performance data
 function generatePerformance(
@@ -23,101 +23,74 @@ function generatePerformance(
   return data;
 }
 
-export const mockVaults: VaultStats[] = [
-  {
-    id: "alpha-1",
-    name: "Alpha Vault",
-    tvl: 500000,
-    totalYield: 35,
+// Helper to generate a vault with random data
+function generateVault(id: string, name: string): VaultStats {
+  const baseYield = Math.random() * 60 - 20; // -20 to +40
+  const weekYield = baseYield * (Math.random() * 0.3 + 0.85); // 85-115% of base yield
+  const monthYield = baseYield * (Math.random() * 0.5 + 0.75); // 75-125% of base yield
+  const tvl = Math.floor(Math.random() * 900000) + 100000; // 100k to 1M
+
+  const badges: BadgeType[] = [];
+  if (baseYield > 30) badges.push("top-gainer");
+  if (tvl > 400000) badges.push("whale");
+  if (Math.abs(weekYield - monthYield) < 5) badges.push("consistent");
+
+  return {
+    id,
+    name,
+    tvl,
+    totalYield: baseYield,
     roi: {
-      "7d": 4.2,
-      "30d": 12.5,
+      "7d": weekYield,
+      "30d": monthYield,
     },
     performance: generatePerformance(100, 0.02),
-    badges: ["top-gainer", "whale"],
-  },
-  {
-    id: "beta-1",
-    name: "Beta Vault",
-    tvl: 350000,
-    totalYield: -8,
-    roi: {
-      "7d": -2.8,
-      "30d": -5.2,
-    },
-    performance: generatePerformance(100, 0.015),
-    badges: ["consistent"],
-  },
-  {
-    id: "gamma-1",
-    name: "Gamma Vault",
-    tvl: 220000,
-    totalYield: 26,
-    roi: {
-      "7d": 2.9,
-      "30d": 9.1,
-    },
-    performance: generatePerformance(100, 0.025),
-    badges: ["top-gainer"],
-  },
-  {
-    id: "delta-1",
-    name: "Delta Vault",
-    tvl: 180000,
-    totalYield: -12,
-    roi: {
-      "7d": -3.5,
-      "30d": -8.5,
-    },
-    performance: generatePerformance(100, 0.03),
-    badges: [],
-  },
-  {
-    id: "epsilon-1",
-    name: "Epsilon Vault",
-    tvl: 450000,
-    totalYield: 32,
-    roi: {
-      "7d": 3.9,
-      "30d": 11.8,
-    },
-    performance: generatePerformance(100, 0.018),
-    badges: ["whale", "consistent"],
-  },
-  {
-    id: "zeta-1",
-    name: "Zeta Vault",
-    tvl: 290000,
-    totalYield: 15,
-    roi: {
-      "7d": 1.2,
-      "30d": 4.8,
-    },
-    performance: generatePerformance(100, 0.01),
-    badges: ["consistent"],
-  },
-  {
-    id: "eta-1",
-    name: "Eta Vault",
-    tvl: 380000,
-    totalYield: -5,
-    roi: {
-      "7d": -1.6,
-      "30d": -2.8,
-    },
-    performance: generatePerformance(100, 0.022),
-    badges: [],
-  },
-  {
-    id: "theta-1",
-    name: "Theta Vault",
-    tvl: 420000,
-    totalYield: 33,
-    roi: {
-      "7d": 4.0,
-      "30d": 12.0,
-    },
-    performance: generatePerformance(100, 0.028),
-    badges: ["top-gainer", "whale"],
-  },
+    badges,
+  };
+}
+
+// Greek alphabet extended with cosmic names for more variety
+const vaultPrefixes = [
+  "Alpha",
+  "Beta",
+  "Gamma",
+  "Delta",
+  "Epsilon",
+  "Zeta",
+  "Eta",
+  "Theta",
+  "Iota",
+  "Kappa",
+  "Lambda",
+  "Mu",
+  "Nu",
+  "Xi",
+  "Omicron",
+  "Pi",
+  "Rho",
+  "Sigma",
+  "Tau",
+  "Upsilon",
+  "Phi",
+  "Chi",
+  "Psi",
+  "Omega",
+  "Nova",
+  "Pulsar",
+  "Quasar",
+  "Nebula",
+  "Stellar",
+  "Cosmic",
+  "Astro",
+  "Solar",
+  "Lunar",
+  "Comet",
 ];
+
+// Generate 34 vaults (showing pagination with 10 per page will give us 4 pages)
+export const mockVaults: VaultStats[] = vaultPrefixes.map((prefix, index) =>
+  generateVault(
+    `${prefix.toLowerCase()}-${Math.floor(Math.random() * 1000)}`,
+    `${prefix} Vault`
+  )
+);

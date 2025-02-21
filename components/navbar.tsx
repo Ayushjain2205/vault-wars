@@ -33,7 +33,7 @@ export default function Navbar() {
               <div className="absolute inset-0 -z-0 h-full w-0 bg-[#04D9FF]/10 transition-all group-hover:w-full" />
             </Link>
             <Link
-              href="#"
+              href="/leaderboard"
               className="group relative font-nav text-sm font-semibold tracking-wider text-[#04D9FF]"
             >
               <span className="relative z-10 uppercase">Leaderboard</span>

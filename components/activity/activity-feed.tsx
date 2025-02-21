@@ -170,6 +170,29 @@ const mockEvents: Event[] = [
     protocol: "Aave",
     socialEngagement: 450,
   },
+  {
+    id: "9",
+    type: "onchain",
+    category: "stake",
+    title: "Small Stake Action",
+    description: "User staked 0.5 ETH in Lido",
+    impact: "low",
+    timestamp: new Date(Date.now() - 1000 * 60 * 40), // 40 mins ago
+    token: "ETH",
+    amount: "0.5",
+    protocol: "Lido",
+  },
+  {
+    id: "10",
+    type: "market",
+    category: "volume",
+    title: "Volume Update",
+    description: "Trading volume slightly below average",
+    impact: "low",
+    timestamp: new Date(Date.now() - 1000 * 60 * 45), // 45 mins ago
+    token: "LINK",
+    socialEngagement: 120,
+  },
 ];
 
 const categoryIcons = {
@@ -194,9 +217,9 @@ const categoryIcons = {
 };
 
 const impactColors = {
-  low: "bg-blue-500/10 text-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.1)]",
+  low: "bg-blue-500/10 text-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.1)] border border-blue-500/20",
   medium:
-    "bg-yellow-500/10 text-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.1)]",
+    "bg-yellow-500/10 text-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.1)] border border-yellow-500/20",
   high: "bg-red-500/10 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.15)] border border-red-500/20",
 };
 
@@ -364,26 +387,33 @@ export function ActivityFeed() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="cyber-panel p-6 relative overflow-hidden group transition-all hover:bg-[#0D0E19]/80 hover:shadow-[0_0_20px_rgba(4,217,255,0.1)] hover:brightness-110"
+                className={cn(
+                  "cyber-panel p-6 relative overflow-hidden group transition-all hover:bg-[#0D0E19]/80",
+                  typeColors[event.type],
+                  "before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-300 group-hover:before:opacity-30",
+                  event.type === "onchain" &&
+                    "before:bg-[radial-gradient(circle_at_center,#04D9FF_0%,transparent_100%)] before:blur-xl",
+                  event.type === "market" &&
+                    "before:bg-[radial-gradient(circle_at_center,#FF10F0_0%,transparent_100%)] before:blur-xl",
+                  event.type === "social" &&
+                    "before:bg-[radial-gradient(circle_at_center,#FFD119_0%,transparent_100%)] before:blur-xl",
+                  event.type === "protocol" &&
+                    "before:bg-[radial-gradient(circle_at_center,#00FF9D_0%,transparent_100%)] before:blur-xl",
+                  event.type === "ai" &&
+                    "before:bg-[radial-gradient(circle_at_center,#9D4EDD_0%,transparent_100%)] before:blur-xl",
+                  "after:absolute after:inset-0 after:opacity-0 after:transition-opacity after:duration-300 group-hover:after:opacity-15",
+                  event.type === "onchain" &&
+                    "after:bg-[radial-gradient(circle_at_center,#04D9FF_0%,transparent_70%)]",
+                  event.type === "market" &&
+                    "after:bg-[radial-gradient(circle_at_center,#FF10F0_0%,transparent_70%)]",
+                  event.type === "social" &&
+                    "after:bg-[radial-gradient(circle_at_center,#FFD119_0%,transparent_70%)]",
+                  event.type === "protocol" &&
+                    "after:bg-[radial-gradient(circle_at_center,#00FF9D_0%,transparent_70%)]",
+                  event.type === "ai" &&
+                    "after:bg-[radial-gradient(circle_at_center,#9D4EDD_0%,transparent_70%)]"
+                )}
               >
-                {/* Hover effect background */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-10 pointer-events-none transition-opacity duration-300"
-                  style={{
-                    background: `linear-gradient(45deg, ${
-                      event.type === "onchain"
-                        ? "#04D9FF"
-                        : event.type === "market"
-                        ? "#FF10F0"
-                        : event.type === "social"
-                        ? "#FFD119"
-                        : event.type === "protocol"
-                        ? "#00FF9D"
-                        : "#9D4EDD"
-                    }22 0%, transparent 100%)`,
-                  }}
-                />
-
                 <div className="relative flex items-start gap-4">
                   <div
                     className={cn(

@@ -53,8 +53,12 @@
     rgba(13, 14, 25, 0.8)
   );
   border: 1px solid rgb(4, 217, 255);
-  box-shadow: 0 0 10px rgba(4, 217, 255, 0.3),
-    inset 0 0 15px rgba(4, 217, 255, 0.2);
+  box-shadow: 0 0 10px rgba(4, 217, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.cyber-panel:hover {
+  border-color: currentColor;
 }
 
 .cyber-border {

@@ -26,10 +26,10 @@ export default function Navbar() {
 
           <nav className="flex items-center gap-6">
             <Link
-              href="#"
+              href="/create"
               className="group relative font-nav text-sm font-semibold tracking-wider text-[#04D9FF]"
             >
-              <span className="relative z-10 uppercase">Play Now</span>
+              <span className="relative z-10 uppercase">Create Vault</span>
               <div className="absolute inset-0 -z-0 h-full w-0 bg-[#04D9FF]/10 transition-all group-hover:w-full" />
             </Link>
             <Link
@@ -43,7 +43,7 @@ export default function Navbar() {
               href="#"
               className="group relative font-nav text-sm font-semibold tracking-wider text-[#04D9FF]"
             >
-              <span className="relative z-10 uppercase">About</span>
+              <span className="relative z-10 uppercase">My Vaults</span>
               <div className="absolute inset-0 -z-0 h-full w-0 bg-[#04D9FF]/10 transition-all group-hover:w-full" />
             </Link>
           </nav>

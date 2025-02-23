@@ -1,5 +1,6 @@
 "use client";
 
+import type React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { generateColorScheme } from "@/utils/color-hash";
@@ -9,6 +10,8 @@ interface VaultProps {
   className?: string;
   onStateChange?: (isOpen: boolean) => void;
   seed: string;
+  mode?: "normal" | "hover" | "content";
+  children?: React.ReactNode;
 }
 
 export function Vault({
@@ -16,6 +19,8 @@ export function Vault({
   className = "",
   onStateChange,
   seed,
+  mode = "normal",
+  children,
 }: VaultProps) {
   const [isSpinning, setIsSpinning] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -30,22 +35,29 @@ export function Vault({
   };
 
   const isStatic = size === "xs" || size === "logo";
+  const isContentMode = mode === "content";
 
   const colors = generateColorScheme(seed);
 
   const handleClick = () => {
     if (isSpinning || isStatic) return;
-    setIsSpinning(true);
 
+    setIsSpinning(true);
     setTimeout(() => {
-      setIsOpen((prev) => !prev);
-      onStateChange?.(!isOpen);
+      const newIsOpen = !isOpen;
+      setIsOpen(newIsOpen);
+      if (onStateChange) {
+        onStateChange(newIsOpen);
+      }
       setIsSpinning(false);
     }, 1000);
   };
 
   return (
-    <div className={`relative aspect-square ${sizeClasses[size]} ${className}`}>
+    <div
+      className={`relative aspect-square ${sizeClasses[size]} ${className}`}
+      onClick={handleClick}
+    >
       {/* Main Vault frame */}
       <div
         className="absolute inset-0 rounded-2xl shadow-lg overflow-hidden"
@@ -53,27 +65,39 @@ export function Vault({
       >
         {/* Vault interior */}
         <div
-          className="absolute inset-[10%] rounded-xl shadow-inner"
-          style={{ backgroundColor: colors.interior }}
+          className={`absolute inset-[10%] rounded-xl shadow-inner transition-all duration-300 ${
+            isContentMode ? "bg-black/40 backdrop-blur-sm" : ""
+          }`}
+          style={{
+            backgroundColor: isContentMode ? undefined : colors.interior,
+          }}
         >
-          <div className="absolute inset-4 grid grid-cols-2 gap-2">
-            <div
-              className="rounded"
-              style={{ backgroundColor: `${colors.compartment}33` }}
-            />
-            <div
-              className="rounded"
-              style={{ backgroundColor: `${colors.compartment}33` }}
-            />
-            <div
-              className="rounded"
-              style={{ backgroundColor: `${colors.compartment}33` }}
-            />
-            <div
-              className="rounded"
-              style={{ backgroundColor: `${colors.compartment}33` }}
-            />
-          </div>
+          {isContentMode ? (
+            // Content mode interior
+            <div className="absolute inset-4 overflow-auto custom-scrollbar">
+              {isOpen && children}
+            </div>
+          ) : (
+            // Default compartment grid
+            <div className="absolute inset-4 grid grid-cols-2 gap-2">
+              <div
+                className="rounded"
+                style={{ backgroundColor: `${colors.compartment}33` }}
+              />
+              <div
+                className="rounded"
+                style={{ backgroundColor: `${colors.compartment}33` }}
+              />
+              <div
+                className="rounded"
+                style={{ backgroundColor: `${colors.compartment}33` }}
+              />
+              <div
+                className="rounded"
+                style={{ backgroundColor: `${colors.compartment}33` }}
+              />
+            </div>
+          )}
         </div>
 
         {/* Vault door */}
@@ -89,9 +113,8 @@ export function Vault({
             type: "spring",
             stiffness: 100,
             damping: 20,
-            delay: isOpen ? 0 : 0.2,
+            duration: 0.5,
           }}
-          onClick={handleClick}
         >
           {/* Corner squares */}
           <motion.div
@@ -147,10 +170,10 @@ export function Vault({
               transition={{
                 rotate: {
                   duration: 1,
-                  ease: "easeInOut",
+                  ease: "linear",
                 },
                 scale: {
-                  duration: 0.3,
+                  duration: 0.2,
                 },
               }}
             >
@@ -168,29 +191,17 @@ export function Vault({
               <motion.div
                 className="absolute left-1/2 top-1/2 h-[85%] w-[15%] -translate-x-1/2 -translate-y-1/2"
                 style={{ backgroundColor: colors.handle }}
-                animate={{
-                  backgroundColor: isOpen ? colors.handle : colors.handle,
-                }}
-                transition={{ duration: 0.3 }}
               />
               <motion.div
                 className="absolute left-1/2 top-1/2 h-[15%] w-[85%] -translate-x-1/2 -translate-y-1/2"
                 style={{ backgroundColor: colors.handle }}
-                animate={{
-                  backgroundColor: isOpen ? colors.handle : colors.handle,
-                }}
-                transition={{ duration: 0.3 }}
               />
 
-              {/* Center green circle */}
+              {/* Center circle */}
               <div className="absolute left-1/2 top-1/2 h-[40%] w-[40%] -translate-x-1/2 -translate-y-1/2">
                 <motion.div
                   className="h-full w-full rounded-full shadow-md"
                   style={{ backgroundColor: colors.accent }}
-                  animate={{
-                    backgroundColor: isOpen ? colors.accent : colors.accent,
-                  }}
-                  transition={{ duration: 0.3 }}
                 >
                   <div className="absolute left-[15%] top-[15%] h-[30%] w-[30%] rounded-full bg-white opacity-50" />
                 </motion.div>

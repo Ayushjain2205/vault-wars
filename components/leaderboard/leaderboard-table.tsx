@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Vault } from "@/components/vault";
 import { VaultBadge } from "./vault-badge";
 import { PerformanceSparkline } from "./performance-sparkline";
@@ -63,14 +64,17 @@ export function LeaderboardTable({
                 </span>
               </td>
               <td className="w-[300px] p-4">
-                <div className="flex items-center gap-4">
+                <Link
+                  href={`/vault/${vault.id}`}
+                  className="flex items-center gap-4 hover:opacity-80 transition-opacity"
+                >
                   <div className="w-12 h-12 flex-shrink-0">
                     <Vault size="xs" seed={vault.id} />
                   </div>
                   <span className="font-medium text-white truncate">
                     {vault.name}
                   </span>
-                </div>
+                </Link>
               </td>
               <td className="p-4 text-right">
                 <span className="font-medium text-white">

@@ -42,6 +42,10 @@
   }
 }
 
+html {
+  background-color: #0d0e19;
+}
+
 .cyber-text {
   text-shadow: 0 0 5px rgba(4, 217, 255, 0.5), 0 0 10px rgba(4, 217, 255, 0.3);
 }

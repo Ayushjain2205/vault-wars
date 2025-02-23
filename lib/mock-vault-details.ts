@@ -64,6 +64,22 @@ export const mockVaultDetails: VaultDetails = {
         percentage: 28,
         riskScore: 4,
       },
+      {
+        asset: "Bitcoin",
+        symbol: "WBTC",
+        amount: 175.25,
+        value: 350000,
+        percentage: 28,
+        riskScore: 4,
+      },
+      {
+        asset: "Dai Stablecoin",
+        symbol: "DAI",
+        amount: 175.25,
+        value: 350000,
+        percentage: 28,
+        riskScore: 4,
+      },
     ],
     yieldSources: [
       {

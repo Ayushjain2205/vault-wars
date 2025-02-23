@@ -6,6 +6,33 @@ import { Vault } from "@/components/vault";
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import type { VaultDetails } from "@/types/vault-details";
 
+// Define color palette with opacity
+const ASSET_COLORS = {
+  primary: [
+    "#04D9FF", // Cyan
+    "#FF10F0", // Pink
+    "#FFD119", // Yellow
+    "#9D4EDD", // Purple
+    "#00FF9D", // Green
+  ],
+  secondary: [
+    "#3B82F6", // Blue
+    "#EF4444", // Red
+    "#10B981", // Emerald
+    "#F59E0B", // Amber
+    "#8B5CF6", // Violet
+  ],
+};
+
+// Helper to add opacity to hex colors
+const addOpacity = (hex: string, opacity: number) => {
+  // Convert opacity (0-100) to hex (00-FF)
+  const alpha = Math.round((opacity / 100) * 255)
+    .toString(16)
+    .padStart(2, "0");
+  return `${hex}${alpha}`;
+};
+
 interface VaultAssetsProps {
   vault: VaultDetails;
 }
@@ -13,17 +40,30 @@ interface VaultAssetsProps {
 export function VaultAssets({ vault }: VaultAssetsProps) {
   const [isVaultOpen, setIsVaultOpen] = useState(false);
 
-  const chartData = vault.composition.assets.map((asset) => ({
+  // Get color for asset based on index
+  const getAssetColor = (index: number, symbol: string) => {
+    // First try to match common symbols to primary colors
+    const commonAssets: Record<string, string> = {
+      ETH: ASSET_COLORS.primary[0],
+      USDC: ASSET_COLORS.primary[1],
+      stETH: ASSET_COLORS.primary[2],
+      WBTC: ASSET_COLORS.primary[3],
+      DAI: ASSET_COLORS.primary[4],
+    };
+
+    if (symbol in commonAssets) {
+      return addOpacity(commonAssets[symbol], 90); // 90% opacity
+    }
+
+    // For other assets, cycle through secondary colors
+    const secondaryIndex = index % ASSET_COLORS.secondary.length;
+    return addOpacity(ASSET_COLORS.secondary[secondaryIndex], 90);
+  };
+
+  const chartData = vault.composition.assets.map((asset, index) => ({
     name: asset.asset,
     value: asset.value,
-    fill:
-      asset.symbol === "ETH"
-        ? "#04D9FF"
-        : asset.symbol === "USDC"
-        ? "#FF10F0"
-        : asset.symbol === "stETH"
-        ? "#FFD119"
-        : "#9D4EDD",
+    fill: getAssetColor(index, asset.symbol),
   }));
 
   const chartConfig = {

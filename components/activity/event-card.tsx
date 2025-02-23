@@ -18,42 +18,82 @@ export function EventCard({ event, formatTimestamp }: EventCardProps) {
 
   if (!eventType || !impactLevel) return null;
 
+  // Convert Tailwind color to hex
+  const getColorFromTailwind = (colorClass: string) => {
+    const colorMap: Record<string, string> = {
+      "text-red-500": "#ef4444",
+      "text-yellow-500": "#eab308",
+      "text-blue-500": "#3b82f6",
+    };
+    return colorMap[colorClass] || "#9ca3af";
+  };
+
+  const impactColor = getColorFromTailwind(impactLevel.color.text);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
+      style={
+        {
+          color: eventType.color,
+          "--event-color": eventType.color,
+        } as React.CSSProperties
+      }
       className={cn(
         "cyber-panel p-6 relative overflow-hidden group transition-all hover:bg-[#0D0E19]/80",
-        `text-[${eventType.color}]`,
+        "border border-transparent hover:border-current",
         "before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-300 group-hover:before:opacity-30",
-        `before:bg-[radial-gradient(circle_at_center,${eventType.color}_0%,transparent_100%)] before:blur-xl`,
+        "before:bg-[radial-gradient(circle_at_center,var(--event-color)_0%,transparent_100%)] before:blur-xl",
         "after:absolute after:inset-0 after:opacity-0 after:transition-opacity after:duration-300 group-hover:after:opacity-15",
-        `after:bg-[radial-gradient(circle_at_center,${eventType.color}_0%,transparent_70%)]`
+        "after:bg-[radial-gradient(circle_at_center,var(--event-color)_0%,transparent_70%)]",
+        "transition-[background,border-color,box-shadow]",
+        "hover:shadow-[0_0_30px_rgba(var(--event-color-rgb),0.2)]"
       )}
     >
       <div className="relative flex items-start gap-4">
         <div
+          style={
+            {
+              color: eventType.color,
+              "--event-color-rgb": eventType.color
+                .replace("#", "")
+                .match(/.{2}/g)
+                ?.map((x) => parseInt(x, 16))
+                .join(","),
+            } as React.CSSProperties
+          }
           className={cn(
             "rounded-full p-2 transition-colors duration-300",
-            "group-hover:bg-current/10 bg-current/5",
-            `text-[${eventType.color}]`
+            "group-hover:bg-current/10 bg-current/5"
           )}
         >
-          <Icon className={cn("h-5 w-5")} />
+          <Icon className="h-5 w-5" />
         </div>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <h3 className={cn("font-nav text-sm uppercase")}>{event.title}</h3>
+            <h3 className="font-nav text-sm uppercase">{event.title}</h3>
             <span
+              style={
+                {
+                  "--impact-color": impactColor,
+                  color: impactColor,
+                  backgroundColor: `${impactColor}1a`,
+                  borderColor: `${impactColor}33`,
+                  boxShadow: `0 0 15px ${impactColor}26`,
+                } as React.CSSProperties
+              }
               className={cn(
                 "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium",
-                impactLevel.color.background,
-                impactLevel.color.text,
-                impactLevel.color.border,
-                impactLevel.color.shadow
+                "relative overflow-hidden transition-all duration-300",
+                "border",
+                "before:absolute before:inset-0 before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-30",
+                "before:bg-[radial-gradient(circle_at_center,var(--impact-color)_0%,transparent_100%)] before:blur-xl",
+                "after:absolute after:inset-0 after:opacity-0 after:transition-opacity after:duration-300 hover:after:opacity-15",
+                "after:bg-[radial-gradient(circle_at_center,var(--impact-color)_0%,transparent_70%)]"
               )}
             >
               {event.impact}

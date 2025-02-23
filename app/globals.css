@@ -57,9 +57,9 @@
   transition: all 0.3s ease;
 }
 
-.cyber-panel:hover {
+/* .cyber-panel:hover {
   border-color: currentColor;
-}
+} */
 
 .cyber-border {
   position: relative;

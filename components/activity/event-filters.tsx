@@ -18,6 +18,16 @@ export function EventFilters({
   onTypeToggle,
   onImpactToggle,
 }: EventFiltersProps) {
+  // Helper function to convert Tailwind color to hex
+  const getColorFromTailwind = (colorClass: string) => {
+    const colorMap: Record<string, string> = {
+      "text-red-500": "#ef4444",
+      "text-yellow-500": "#eab308",
+      "text-blue-500": "#3b82f6",
+    };
+    return colorMap[colorClass] || "#9ca3af";
+  };
+
   return (
     <div className="cyber-panel p-4 sticky top-24">
       <div className="flex items-center gap-2 mb-4">
@@ -29,15 +39,18 @@ export function EventFilters({
       <div className="space-y-2">
         {eventTypes.map((type) => {
           const Icon = type.icon;
+          const isSelected = selectedTypes.includes(type.id);
+
           return (
             <button
               key={type.id}
               onClick={() => onTypeToggle(type.id)}
+              style={{
+                backgroundColor: isSelected ? `${type.color}1a` : "transparent",
+                color: isSelected ? type.color : "#9ca3af",
+              }}
               className={cn(
-                "w-full p-2 rounded flex items-center gap-2 transition-colors",
-                selectedTypes.includes(type.id)
-                  ? `bg-[${type.color}]/10 text-[${type.color}]`
-                  : `text-gray-400 hover:bg-[${type.color}]/5`
+                "w-full p-2 rounded flex items-center gap-2 transition-colors hover:bg-opacity-5"
               )}
             >
               <Icon className="h-4 w-4" />
@@ -55,20 +68,24 @@ export function EventFilters({
           </h3>
         </div>
         <div className="space-y-2">
-          {impactLevels.map((level) => (
-            <button
-              key={level.id}
-              onClick={() => onImpactToggle(level.id)}
-              className={cn(
-                "w-full p-2 rounded flex items-center gap-2 transition-colors",
-                selectedImpact.includes(level.id)
-                  ? cn(level.color.background, level.color.text)
-                  : cn("text-gray-400", `hover:${level.color.background}`)
-              )}
-            >
-              <span className="font-nav text-sm">{level.label}</span>
-            </button>
-          ))}
+          {impactLevels.map((level) => {
+            const isSelected = selectedImpact.includes(level.id);
+            const color = getColorFromTailwind(level.color.text);
+
+            return (
+              <button
+                key={level.id}
+                onClick={() => onImpactToggle(level.id)}
+                style={{
+                  backgroundColor: isSelected ? `${color}1a` : "transparent",
+                  color: isSelected ? color : "#9ca3af",
+                }}
+                className="w-full p-2 rounded flex items-center gap-2 transition-colors hover:bg-opacity-5"
+              >
+                <span className="font-nav text-sm">{level.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

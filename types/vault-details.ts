@@ -70,3 +70,24 @@ export interface VaultStrategy {
 }
 
 export type TimeFrame = "7D" | "30D" | "90D" | "ALL";
+export type RiskLevel = "low" | "medium" | "high";
+export type Badge = "top-gainer" | "whale" | "consistent";
+
+export interface ROIData {
+  "7d": number;
+  "30d": number;
+  "90d": number;
+  allTime: number;
+}
+
+export interface VaultStats {
+  id: string;
+  name: string;
+  tvl: number;
+  totalYield: number;
+  roi: ROIData;
+  riskLevel: RiskLevel;
+  badges: Badge[];
+  isTracked: boolean;
+  lastUpdated: Date;
+}

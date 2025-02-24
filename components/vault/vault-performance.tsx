@@ -89,7 +89,10 @@ export function VaultPerformance({ vault }: VaultPerformanceProps) {
                         {formatDate(payload[0].payload.timestamp)}
                       </div>
                       <div className="text-sm font-medium text-[#04D9FF]">
-                        {payload[0].value?.toFixed(2)}%
+                        {typeof payload[0].value === "number"
+                          ? payload[0].value.toFixed(2)
+                          : payload[0].value}
+                        %
                       </div>
                     </div>
                   );

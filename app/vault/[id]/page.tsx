@@ -26,7 +26,7 @@ export default function VaultPage() {
           {/* Top Section */}
           <div className="grid gap-4 md:grid-cols-[400px_1fr]">
             {/* Left Column - Vault Visualization */}
-            <div className="h-[600px]">
+            <div className="h-[450px]">
               <VaultAssets vault={vault} />
             </div>
 

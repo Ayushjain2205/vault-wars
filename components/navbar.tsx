@@ -1,7 +1,10 @@
 "use client";
 import { Vault } from "@/components/vault";
+import { client } from "@/utils/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ConnectButton } from "thirdweb/react";
+import { defineChain } from "thirdweb";
 
 export default function Navbar() {
   const [seed, setSeed] = useState("");
@@ -10,6 +13,17 @@ export default function Navbar() {
     // Set seed once when component mounts
     setSeed(new Date().toISOString());
   }, []);
+
+  const chain = defineChain({
+    id: 57054,
+    name: "Sonic Blaze",
+    rpc: "https://rpc.blaze.soniclabs.com/",
+    nativeCurrency: {
+      name: "Sonic",
+      symbol: "S",
+      decimals: 18,
+    },
+  });
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#04D9FF]/30 bg-[#0D0E19]/80 backdrop-blur">
@@ -46,6 +60,7 @@ export default function Navbar() {
               <span className="relative z-10 uppercase">My Vaults</span>
               <div className="absolute inset-0 -z-0 h-full w-0 bg-[#04D9FF]/10 transition-all group-hover:w-full" />
             </Link>
+            <ConnectButton client={client} chain={chain} />
           </nav>
         </div>
       </div>

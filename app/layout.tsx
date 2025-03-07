@@ -1,6 +1,7 @@
 import type React from "react";
 import "./globals.css";
 import { Space_Grotesk } from "next/font/google";
+import { ThirdwebProvider } from "thirdweb/react";
 
 // Load Space Grotesk font
 const spaceGrotesk = Space_Grotesk({
@@ -30,7 +31,7 @@ export default function RootLayout({
       <body
         className={`min-h-screen bg-white ${spaceGrotesk.variable} font-sans`}
       >
-        {children}
+        <ThirdwebProvider>{children}</ThirdwebProvider>
       </body>
     </html>
   );
